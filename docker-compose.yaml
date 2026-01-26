@@ -1,0 +1,60 @@
+
+services:
+  db:
+    image: postgres:16
+    container_name: pg_chopp
+    environment:
+      POSTGRES_DB: chopp_db
+      POSTGRES_USER: user_test
+      POSTGRES_PASSWORD: user123
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user_test -d chopp_db"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  chopp-service:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        MAIN_PACKAGE: ./init
+        VERSION: "1.0.0"
+        COMMIT: "${GIT_COMMIT:-local}"
+        BUILD_TIME: "${BUILD_TIME:-now}"
+    image: chopp-service:1.0.0
+    ports:
+      - "50051:50051"
+      - "2112:2112"
+    environment:
+      APP_PORT: "50051"
+      DB_DSN: "postgres://user_test:user123@db:5432/chopp_db?sslmode=disable"
+
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+
+#  prometheus:
+#    image: prom/prometheus:latest
+#    volumes:
+#      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+#    ports:
+#      - "9090:9090"
+#    depends_on:
+#      - chopp-service
+#
+#  grafana:
+#    image: grafana/grafana:latest
+#    container_name: grafana
+#    ports:
+#      - "3000:3000"
+#    depends_on:
+#      - chopp-service
+volumes:
+  pgdata:
