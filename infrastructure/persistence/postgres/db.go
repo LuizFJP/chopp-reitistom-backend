@@ -18,10 +18,15 @@ import (
 )
 
 type Repositories struct {
-	User    repository.UserRepositoryInterface
-	Address repository.AddressRepositoryInterface
-	db      *gorm.DB
-	sqlDB   *sql.DB
+	User       repository.UserRepositoryInterface
+	Address    repository.AddressRepositoryInterface
+	Suggestion repository.SuggestionRepositoryInterface
+	Category   repository.CategoryRepositoryInterface
+	Rating     repository.RatingRepositoryInterface
+	Product    repository.ProductRepositoryInterface
+	Ingredient repository.IngredientRepositoryInterface
+	db         *gorm.DB
+	sqlDB      *sql.DB
 }
 
 func NewDB(config config.DB) (*Repositories, error) {
@@ -35,7 +40,7 @@ func NewDB(config config.DB) (*Repositories, error) {
 	)
 
 	dns := fmt.Sprintf("host=%s port=%s user=%s dbname=%s sslmode=disable password=%s", config.Host, config.Port, config.User, config.Name, config.Password)
-	db, err := gorm.Open(postgres.Open(dns), &gorm.Config{
+	dbPostgres, err := gorm.Open(postgres.Open(dns), &gorm.Config{
 		Logger: newLogger,
 	})
 
@@ -43,13 +48,18 @@ func NewDB(config config.DB) (*Repositories, error) {
 		return nil, err
 	}
 
-	sqlDB, err := db.DB()
+	sqlDB, err := dbPostgres.DB()
 
 	return &Repositories{
-		User:    NewUserRepository(db),
-		Address: NewAddressRepository(db),
-		db:      db,
-		sqlDB:   sqlDB,
+		User:       NewUserRepository(dbPostgres),
+		Address:    NewAddressRepository(dbPostgres),
+		Suggestion: NewSuggestionRepository(dbPostgres),
+		Category:   NewCategoryRepository(dbPostgres),
+		Rating:     NewRatingRepository(dbPostgres),
+		Product:    NewProductRepository(dbPostgres),
+		Ingredient: NewIngredientRepository(dbPostgres),
+		db:         dbPostgres,
+		sqlDB:      sqlDB,
 	}, nil
 }
 
@@ -61,5 +71,10 @@ func (r *Repositories) Automigrate() error {
 	return r.db.AutoMigrate(
 		&model.User{},
 		&model.Address{},
+		&model.Suggestion{},
+		&model.Category{},
+		&model.Rating{},
+		&model.Product{},
+		&model.Ingredient{},
 	)
 }

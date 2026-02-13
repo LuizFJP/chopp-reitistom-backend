@@ -13,7 +13,7 @@ func FromAddressModelToEntity(model *model.Address) *entity.Address {
 		Number:       model.Number,
 		City:         model.City,
 		Complement:   model.Complement,
-		LandMark:     model.LandMark,
+		Landmark:     model.Landmark,
 	}
 }
 
@@ -25,13 +25,13 @@ func FromAddressEntityToModel(entity *entity.Address) *model.Address {
 		Number:       entity.Number,
 		City:         entity.City,
 		Complement:   entity.Complement,
-		LandMark:     entity.LandMark,
+		Landmark:     entity.Landmark,
 	}
 }
 
 func UpdateAddressFromEntityToModel(entity *entity.Address, model *model.Address) {
-	if entity.LandMark != model.LandMark {
-		model.LandMark = entity.LandMark
+	if entity.Landmark != model.Landmark {
+		model.Landmark = entity.Landmark
 	}
 
 	if entity.Complement != model.Complement {

@@ -28,7 +28,11 @@ func (uh *UserHandler) GetUserHandler() http.Handler {
 			return domainModel.Wrap(domainModel.ErrUUIDIsMissing)
 		}
 
-		result := uh.userUseCase.Get(uuid.MustParse(userUUID))
+		result, err := uh.userUseCase.Get(uuid.MustParse(userUUID))
+
+		if err != nil {
+			return domainModel.Wrap(err)
+		}
 
 		if err := model.JSON(w, http.StatusOK, result); err != nil {
 			return domainModel.Wrap(err)
@@ -49,7 +53,11 @@ func (uh *UserHandler) UpdateUserHandler() http.Handler {
 		var user domainModel.User
 		json.NewDecoder(r.Body).Decode(&user)
 
-		result := uh.userUseCase.Update(domainModel.User{})
+		result, err := uh.userUseCase.Update(domainModel.User{})
+
+		if err != nil {
+			return domainModel.Wrap(err)
+		}
 
 		if err := model.JSON(w, http.StatusOK, result); err != nil {
 			return domainModel.Wrap(err)

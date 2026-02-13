@@ -17,8 +17,8 @@ func NewAddressRepository(db *gorm.DB) *AddressRepository {
 
 func (aruc *AddressRepository) Create(address *model.Address) error {
 	result := aruc.db.Create(address)
-	if err := result.Error; err != nil {
-		return err
+	if result.Error != nil {
+		return result.Error
 	}
 
 	return nil
@@ -26,8 +26,8 @@ func (aruc *AddressRepository) Create(address *model.Address) error {
 
 func (aruc *AddressRepository) Update(address *model.Address) error {
 	result := aruc.db.Save(address)
-	if err := result.Error; err != nil {
-		return err
+	if result.Error != nil {
+		return result.Error
 	}
 	return nil
 }
@@ -43,8 +43,8 @@ func (aruc *AddressRepository) GetByUUID(uuid uuid.UUID) (*model.Address, error)
 
 func (aruc *AddressRepository) Delete(address *model.Address) error {
 	result := aruc.db.Delete(address)
-	if err := result.Error; err != nil {
-		return err
+	if result.Error != nil {
+		return result.Error
 	}
 	return nil
 }

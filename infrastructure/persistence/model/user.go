@@ -1,16 +1,19 @@
 package model
 
 import (
-	"chopp-reitistom-backend/domain/entity"
-
 	"github.com/google/uuid"
+	"gorm.io/gorm"
 )
 
 type User struct {
-	Id       int            `json:"id" gorm:"AUTO_INCREMENT" gorm:"primaryKey"`
-	Name     string         `json:"name"`
-	UUID     uuid.UUID      `json:"UUID"`
-	Email    string         `json:"email"`
-	Password string         `json:"password"`
-	Address  entity.Address `json:"address" gorm:"constraint:OnUpdate:CASCADE,OnDelete:SET NULL;"`
+	gorm.Model
+	Id               uint         `gorm:"AUTO_INCREMENT" gorm:"primaryKey"`
+	Name             string       `gorm:"not null"`
+	UUID             uuid.UUID    `gorm:"not null"`
+	Email            string       `gorm:"not null"`
+	Password         string       `gorm:"not null"`
+	Role             string       `gorm:"not null"`
+	Suggestion       []Suggestion `gorm:"foreignKey:UserId"`
+	FavoriteProducts []*Product   `gorm:"many2many:favorite_product"`
+	Orders           []*Order     `gorm:"foreignKey:UserId"`
 }

@@ -36,7 +36,7 @@ func (au *AuthHandler) BearerAuthHandler(next http.Handler) http.Handler {
 
 		token := tokenSplit[1]
 
-		if err := application.VerifyToken(token); err != nil {
+		if err := application.VerifyToken(au.authConfig, token); err != nil {
 			return model.JSON(w, http.StatusUnauthorized, err)
 
 		}

@@ -10,5 +10,5 @@ type Address struct {
 	Number       string    `json:"number"`
 	City         string    `json:"city"`
 	Complement   string    `json:"complement"`
-	LandMark     string    `json:"landMark"`
+	Landmark     string    `json:"landmark"`
 }

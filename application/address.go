@@ -20,9 +20,12 @@ type AddressUseCase struct {
 	userRepository    repository.UserRepositoryInterface
 }
 
-func NewAddressUseCase(repository repository.AddressRepositoryInterface) *AddressUseCase {
+func NewAddressUseCase(
+	repository repository.AddressRepositoryInterface,
+	userRepository repository.UserRepositoryInterface) *AddressUseCase {
 	return &AddressUseCase{
 		addressRepository: repository,
+		userRepository:    userRepository,
 	}
 }
 

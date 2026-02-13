@@ -25,12 +25,29 @@ func main() {
 	}
 
 	userApplication := application.NewUserUseCase(db.User)
-	authApplication := application.NewAuthUseCase(db.User)
+	authApplication := application.NewAuthUseCase(&configs.Auth, db.User)
+	addressApplication := application.NewAddressUseCase(db.Address, db.User)
+	categoryApplication := application.NewCategoryUseCase(db.Category)
+	suggestionApplication := application.NewSuggestionUseCase(db.Suggestion, db.User)
+	ratingApplication := application.NewRatingUseCase(db.Rating, db.Product)
+	ingredientApplication := application.NewIngredientUseCase(db.Ingredient, db.Product)
 
 	userHandler := handlers.NewUserHandler(userApplication)
-	authHandler := handlers.NewAuthHandler(authApplication)
+	authHandler := handlers.NewAuthHandler(&configs.Auth, authApplication)
+	addressHandler := handlers.NewAddressHandler(addressApplication)
+	suggestionHandler := handlers.NewSuggestionHandler(suggestionApplication)
+	categoryHandler := handlers.NewCategoryHandler(categoryApplication)
+	ratingHandler := handlers.NewRatingHandler(ratingApplication)
+	ingredientHandler := handlers.NewIngredientHandler(ingredientApplication)
 
-	router := httpInterface.NewRouter(userHandler, authHandler)
+	router := httpInterface.NewRouter(
+		userHandler,
+		authHandler,
+		addressHandler,
+		suggestionHandler,
+		categoryHandler,
+		ratingHandler,
+		ingredientHandler)
 
 	go func() {
 		if err = http.ListenAndServe(":8000", router); err != nil {
