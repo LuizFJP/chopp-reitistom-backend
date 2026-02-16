@@ -1,6 +1,6 @@
 FROM golang:1.24.6 AS builder
 
-ARG MAIN_PACKAGE=./init
+ARG MAIN_PACKAGE=.
 ARG VERSION=dev
 ARG COMMIT=none
 ARG BUILD_TIME=unknown
