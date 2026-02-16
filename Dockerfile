@@ -32,6 +32,6 @@ FROM gcr.io/distroless/static:nonroot
 WORKDIR /
 COPY --from=builder /app /app
 
-EXPOSE 50051 2112
+EXPOSE 8000
 USER nonroot:nonroot
 ENTRYPOINT ["/app"]

@@ -29,10 +29,9 @@ services:
         BUILD_TIME: "${BUILD_TIME:-now}"
     image: chopp-service:1.0.0
     ports:
-      - "50051:50051"
-      - "2112:2112"
+      - "8000:8000"
     environment:
-      APP_PORT: "50051"
+      APP_PORT: "8000"
       DB_DSN: "postgres://user_test:user123@db:5432/chopp_db?sslmode=disable"
 
     depends_on:
