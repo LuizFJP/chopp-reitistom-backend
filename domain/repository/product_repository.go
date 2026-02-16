@@ -12,6 +12,7 @@ type ProductRepositoryInterface interface {
 	GetByUUID(uuid uuid.UUID) (*model.Product, error)
 	Delete(product *model.Product) error
 	GetAll() ([]*model.Product, error)
+	GetManyByUUID(uuids []uuid.UUID) ([]*model.Product, error)
 	AddIngredients(product *model.Product, ingredients []*model.Ingredient) error
 	RemoveIngredients(product *model.Product, ingredients []*model.Ingredient) error
 }

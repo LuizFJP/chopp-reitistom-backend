@@ -3,6 +3,8 @@ package mapper
 import (
 	"chopp-reitistom-backend/domain/entity"
 	"chopp-reitistom-backend/infrastructure/persistence/model"
+
+	"github.com/google/uuid"
 )
 
 func FromProductModelToEntity(model *model.Product) *entity.Product {
@@ -34,4 +36,12 @@ func FromProductFromModelToEntityArray(models []*model.Product) []*entity.Produc
 		entities = append(entities, FromProductModelToEntity(m))
 	}
 	return entities
+}
+
+func ExtractUUIDsFromArray(models []*model.Product) []uuid.UUID {
+	var uuids []uuid.UUID
+	for _, m := range models {
+		uuids = append(uuids, m.UUID)
+	}
+	return uuids
 }

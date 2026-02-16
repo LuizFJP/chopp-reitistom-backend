@@ -2,6 +2,7 @@ package entity
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/google/uuid"
 )
@@ -34,8 +35,14 @@ func ParseStatus(v string) (Status, error) {
 }
 
 type Order struct {
-	OrderUUID   uuid.UUID `json:"orderUUID"`
-	UserUUID    uuid.UUID `json:"userUUID"`
-	ProductUUID uuid.UUID `json:"productUUID"`
-	Status      Status    `json:"status"`
+	UUID          uuid.UUID   `json:"uuid"`
+	UserUUID      uuid.UUID   `json:"userUUID"`
+	ProductsUUID  []uuid.UUID `json:"productsUuid"`
+	Status        Status      `json:"status"`
+	CreatedAt     time.Time   `json:"createdAt"`
+	ConfirmedAt   time.Time   `json:"confirmedAt"`
+	SentAt        time.Time   `json:"sentAt"`
+	CanceledAt    time.Time   `json:"canceledAt"`
+	PaymentMethod string      `json:"paymentMethod"`
+	StatusPayment string      `json:"statusPayment"`
 }

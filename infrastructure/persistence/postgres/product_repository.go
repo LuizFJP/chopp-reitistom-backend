@@ -2,6 +2,7 @@ package postgres
 
 import (
 	"chopp-reitistom-backend/infrastructure/persistence/model"
+	"fmt"
 
 	"github.com/google/uuid"
 	"gorm.io/gorm"
@@ -48,11 +49,28 @@ func (pr *ProductRepository) Delete(product *model.Product) error {
 	return nil
 }
 
-func (pr *ProductRepository) GetAll() ([]*model.Suggestion, error) {
-	var results []*model.Suggestion
+func (pr *ProductRepository) GetAll() ([]*model.Product, error) {
+	var results []*model.Product
 	err := pr.db.Find(&results).Error
 	if err != nil {
 		return nil, err
 	}
 	return results, nil
+}
+
+func (pr *ProductRepository) GetManyByUUID(uuids []uuid.UUID) ([]*model.Product, error) {
+	var results []*model.Product
+	err := pr.db.Find(&results, "uuid IN ?", uuids).Error
+	if err != nil {
+		return nil, err
+	}
+	return results, nil
+}
+
+func (pr *ProductRepository) AddIngredients(product *model.Product, ingredients []*model.Ingredient) error {
+	return fmt.Errorf("not implemented yet")
+}
+
+func (pr *ProductRepository) RemoveIngredients(product *model.Product, ingredients []*model.Ingredient) error {
+	return fmt.Errorf("not implemented yet")
 }
