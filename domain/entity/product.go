@@ -2,6 +2,11 @@ package entity
 
 import "github.com/google/uuid"
 
+type ProductIngredients struct {
+	ProductUUID     uuid.UUID   `json:"productUUID"`
+	IngredientsUUID []uuid.UUID `json:"ingredientsUUID"`
+}
+
 type Product struct {
 	UUID         uuid.UUID     `json:"uuid"`
 	Name         string        `json:"name"`

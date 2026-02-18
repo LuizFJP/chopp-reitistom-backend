@@ -31,6 +31,8 @@ func main() {
 	suggestionApplication := application.NewSuggestionUseCase(db.Suggestion, db.User)
 	ratingApplication := application.NewRatingUseCase(db.Rating, db.Product)
 	ingredientApplication := application.NewIngredientUseCase(db.Ingredient, db.Product)
+	orderApplication := application.NewOrderUseCase(db.Order, db.Product, db.User)
+	productApplication := application.NewProductUseCase(db.Product, db.Item, db.Ingredient, db.Category)
 
 	userHandler := handlers.NewUserHandler(userApplication)
 	authHandler := handlers.NewAuthHandler(&configs.Auth, authApplication)
@@ -39,6 +41,8 @@ func main() {
 	categoryHandler := handlers.NewCategoryHandler(categoryApplication)
 	ratingHandler := handlers.NewRatingHandler(ratingApplication)
 	ingredientHandler := handlers.NewIngredientHandler(ingredientApplication)
+	orderHandler := handlers.NewOrderHandler(orderApplication)
+	productHandler := handlers.NewProductHandler(productApplication)
 
 	router := httpInterface.NewRouter(
 		userHandler,
@@ -47,7 +51,10 @@ func main() {
 		suggestionHandler,
 		categoryHandler,
 		ratingHandler,
-		ingredientHandler)
+		ingredientHandler,
+		orderHandler,
+		productHandler,
+	)
 
 	go func() {
 		if err = http.ListenAndServe(":8000", router); err != nil {

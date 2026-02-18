@@ -25,6 +25,8 @@ type Repositories struct {
 	Rating     repository.RatingRepositoryInterface
 	Product    repository.ProductRepositoryInterface
 	Ingredient repository.IngredientRepositoryInterface
+	Order      repository.OrderRepositoryInterface
+	Item       repository.ItemRepositoryInterface
 	db         *gorm.DB
 	sqlDB      *sql.DB
 }
@@ -58,6 +60,8 @@ func NewDB(config config.DB) (*Repositories, error) {
 		Rating:     NewRatingRepository(dbPostgres),
 		Product:    NewProductRepository(dbPostgres),
 		Ingredient: NewIngredientRepository(dbPostgres),
+		Order:      NewOrderRepository(dbPostgres),
+		Item:       NewItemRepository(dbPostgres),
 		db:         dbPostgres,
 		sqlDB:      sqlDB,
 	}, nil
@@ -76,5 +80,7 @@ func (r *Repositories) Automigrate() error {
 		&model.Rating{},
 		&model.Product{},
 		&model.Ingredient{},
+		&model.Order{},
+		&model.Item{},
 	)
 }

@@ -15,6 +15,8 @@ func NewRouter(
 	categoryHandler *handlers.CategoryHandler,
 	ratingHandler *handlers.RatingHandler,
 	ingredientHandler *handlers.IngredientHandler,
+	orderHandler *handlers.OrderHandler,
+	productHandler *handlers.ProductHandler,
 ) http.Handler {
 	publicRouter := gorouter.New()
 	privateRouter := gorouter.New(authHandler.BearerAuthHandler)
@@ -51,6 +53,21 @@ func NewRouter(
 	privateRouter.PATCH("/ingredient", ingredientHandler.UpdateHandler())
 	privateRouter.GET("/ingredient/product/{productId}", ingredientHandler.GetAllByProductIdHandler())
 	privateRouter.DELETE("/ingredient/{ingredientId}", ingredientHandler.DeleteHandler())
+
+	publicRouter.POST("/order", orderHandler.CreateHandler())
+	privateRouter.GET("/order/all/user/{userId}", orderHandler.GetAllByUserUUIDHandler())
+	privateRouter.PATCH("/order", orderHandler.UpdateHandler())
+	privateRouter.GET("/order/{orderId}", orderHandler.GetByUUIDHandler())
+	privateRouter.DELETE("/order/{ingredientId}", orderHandler.DeleteHandler())
+
+	publicRouter.POST("/product", productHandler.CreateHandler())
+	privateRouter.GET("/product/all", productHandler.GetAllHandler())
+	privateRouter.PATCH("/product", productHandler.UpdateHandler())
+	privateRouter.GET("/product/{productId}", productHandler.GetByUUIDHandler())
+	privateRouter.DELETE("/product/{ingredientId}", productHandler.DeleteHandler())
+	privateRouter.PATCH("/product/addIngredients", productHandler.AddIngredientsHandler())
+	privateRouter.PATCH("/product/removeIngredients", productHandler.RemoveIngredientsHandler())
+	privateRouter.GET("/product/{productId}", productHandler.GetQuantityHandler())
 
 	mainRouter := gorouter.New()
 	mainRouter.GET("/health", handlers.BuildLivenessHandler())

@@ -15,8 +15,8 @@ type ProductUseCaseInterface interface {
 	GetByUUID(uuid uuid.UUID) (*entity.Product, error)
 	GetAll() ([]*entity.Product, error)
 	Delete(uuid uuid.UUID) error
-	AddIngredients(productUUID, ingredientUUID []uuid.UUID) error
-	RemoveIngredients(productUUID, ingredientUUID []uuid.UUID) error
+	AddIngredients(productUUID uuid.UUID, ingredientUUID []uuid.UUID) error
+	RemoveIngredients(productUUID uuid.UUID, ingredientUUID []uuid.UUID) error
 	GetQuantity(productUUID uuid.UUID) (int, error)
 }
 

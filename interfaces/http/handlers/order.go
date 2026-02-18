@@ -14,7 +14,13 @@ type OrderHandler struct {
 	orderUseCase application.OrderUseCaseInterface
 }
 
-func (oh *OrderHandler) Create() http.Handler {
+func NewOrderHandler(
+	orderUseCase application.OrderUseCaseInterface,
+) *OrderHandler {
+	return &OrderHandler{orderUseCase}
+}
+
+func (oh *OrderHandler) CreateHandler() http.Handler {
 	fn := func(w http.ResponseWriter, r *http.Request) error {
 		if r.Body == nil {
 			return domainModel.Wrap(domainModel.ErrBodyIsMissing)
@@ -39,7 +45,7 @@ func (oh *OrderHandler) Create() http.Handler {
 	return model.HandlerFunc(fn)
 }
 
-func (oh *OrderHandler) Update() http.Handler {
+func (oh *OrderHandler) UpdateHandler() http.Handler {
 	fn := func(w http.ResponseWriter, r *http.Request) error {
 		if r.Body == nil {
 			return domainModel.Wrap(domainModel.ErrBodyIsMissing)
@@ -64,7 +70,7 @@ func (oh *OrderHandler) Update() http.Handler {
 	return model.HandlerFunc(fn)
 }
 
-func (oh *OrderHandler) GetByUUID() http.Handler {
+func (oh *OrderHandler) GetByUUIDHandler() http.Handler {
 	fn := func(w http.ResponseWriter, r *http.Request) error {
 		orderUUID := r.FormValue("orderId")
 
@@ -88,7 +94,7 @@ func (oh *OrderHandler) GetByUUID() http.Handler {
 	return model.HandlerFunc(fn)
 }
 
-func (oh *OrderHandler) GetAllByUserUUID() http.Handler {
+func (oh *OrderHandler) GetAllByUserUUIDHandler() http.Handler {
 	fn := func(w http.ResponseWriter, r *http.Request) error {
 		userUUID := r.FormValue("userId")
 
@@ -112,15 +118,19 @@ func (oh *OrderHandler) GetAllByUserUUID() http.Handler {
 	return model.HandlerFunc(fn)
 }
 
-func (oh *OrderHandler) Delete() http.Handler {
+func (oh *OrderHandler) DeleteHandler() http.Handler {
 	fn := func(w http.ResponseWriter, r *http.Request) error {
 		orderUUID := r.FormValue("orderId")
 		if orderUUID == "" {
 			return domainModel.Wrap(domainModel.ErrUUIDIsMissing)
 		}
-		uuidConverted := oh.orderUseCase.Delete(uuid.MustParse(orderUUID))
+		err := oh.orderUseCase.Delete(uuid.MustParse(orderUUID))
 
-		if err := model.JSON(w, http.StatusNoContent, uuidConverted); err != nil {
+		if err != nil {
+			return domainModel.Wrap(err)
+		}
+
+		if err = model.JSON(w, http.StatusNoContent, struct{}{}); err != nil {
 			return domainModel.Wrap(err)
 		}
 
