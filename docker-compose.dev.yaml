@@ -27,7 +27,7 @@ services:
         VERSION: "1.0.0"
         COMMIT: "${GIT_COMMIT:-local}"
         BUILD_TIME: "${BUILD_TIME:-now}"
-    image: chopp-service:1.0.0
+    image: backend-chopp-reitistom:1.0.0
     ports:
       - "8000:8000"
     environment:
