@@ -39,6 +39,5 @@ jobs:
           script: |
             cd ~/chopp-reitistom-backend
             git pull origin main
-            cd ..
             docker-compose -f docker-compose.dev.yaml pull
             docker-compose -f docker-compose.dev.yaml up -d
