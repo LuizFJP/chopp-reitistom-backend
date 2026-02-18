@@ -1,3 +1,5 @@
+name: CI
+
 on:
   push:
     branches: [ "dev", "main" ]
@@ -31,17 +33,17 @@ jobs:
       - name: Coverage
         run: go test $(go list ./... | grep -v '/proto' | grep -v '/domain/repository' | grep -v '/init') -coverprofile=coverage.out
 
-#      - name: SonarQube Scan
-#        uses: SonarSource/sonarqube-scan-action@v6
-#        env:
-#          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-#          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
-#        with:
-#          args: >
-#            -Dsonar.projectKey=LuizFJP_chopp-reitistom-backend
-#            -Dsonar.organization=luizfjp
-#            -Dsonar.sources=.
-#            -Dsonar.go.coverage.reportPaths=coverage.out
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v6
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+        with:
+          args: >
+            -Dsonar.projectKey=LuizFJP_chopp-reitistom-backend
+            -Dsonar.organization=luizfjp
+            -Dsonar.sources=.
+            -Dsonar.go.coverage.reportPaths=coverage.out
 
       - name: Create GitHub tag for version
         if: startsWith(github.ref, 'refs/heads/main')
